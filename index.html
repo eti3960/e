@@ -1,4 +1,4 @@
-m<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@ m<!DOCTYPE html>
     <style>
         :root { 
             --grass-green: #3CB371; 
-            --mid-gray: #808080; 
+            --mid-gray: rgba(0, 0, 0, 0.8); /* Fond noir 80% */
             --blue: #00BFFF; 
             --highlight-green: rgba(60, 179, 113, 0.2); 
         }
@@ -15,35 +15,34 @@ m<!DOCTYPE html>
         body { 
             font-family: 'Fact Expanded', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
             background-color: #ffffff; 
-            display: flex; justify-content: center; padding: 20px; color: #333333; margin: 0;
+            display: flex; justify-content: center; padding: 5px; color: #333333; margin: 0;
         }
 
         #calc { 
             background-color: var(--mid-gray); 
-            padding: 25px; border-radius: 12px; 
+            padding: 10px 25px 50px 25px; /* Réduction padding haut */
+            border-radius: 12px; 
             width: 100%; max-width: 480px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             color: white; 
             position: relative;
-            padding-bottom: 50px;
+            margin-top: 5px; /* Remonte le bloc */
         }
 
         h1.logo { 
-            text-align: center; margin: 0 0 10px 0; 
+            text-align: center; 
+            margin: 5px 0 10px 0; /* Réduction marge titre de 75% */
             color: var(--grass-green); font-weight: 900; 
             font-size: 4em; line-height: 1;
         }
 
-        /* Système de grille avec séparateur X */
         .row-inputs {
             display: flex;
             align-items: flex-end;
             gap: 10px;
             margin-bottom: 5px;
         }
-        .input-group {
-            flex: 1;
-        }
+        .input-group { flex: 1; }
         .separator {
             padding-bottom: 15px;
             font-weight: bold;
@@ -74,7 +73,7 @@ m<!DOCTYPE html>
         
         .row-highlight { background-color: var(--highlight-green) !important; }
 
-        .info { font-size: 0.85em; color: #e0e0e0; border-top: 1px solid #999; padding-top: 10px; margin-top: 15px; line-height: 1.6; }
+        .info { font-size: 0.85em; color: #e0e0e0; border-top: 1px solid #666; padding-top: 10px; margin-top: 15px; line-height: 1.6; }
         .highlight { color: #ffffff; font-weight: bold; }
 
         .signature {
@@ -90,12 +89,12 @@ m<!DOCTYPE html>
 
     <div class="row-inputs">
         <div class="input-group">
-            <label>Largeur mm (laize)</label>
+            <label>Largeur mm (L)</label>
             <input type="number" id="largeur" placeholder="0" oninput="calculer()">
         </div>
         <div class="separator">x</div>
         <div class="input-group">
-            <label>Hauteur mm (avance)</label>
+            <label>Hauteur mm (A)</label>
             <input type="number" id="hauteur" placeholder="0" oninput="calculer()">
         </div>
     </div>
@@ -180,26 +179,20 @@ function moteurCalcul(l, h, q, mat, imp, sortes) {
     const LAIZE = 330;
     const GAP = 4;
     const MARGE_HP = 10;
-
     let posesLaize = Math.floor((LAIZE - MARGE_HP) / (l + GAP));
     if (posesLaize < 1) posesLaize = 1;
-
     let nbRangs = Math.ceil(q / posesLaize);
     let ml = (nbRangs * (h + GAP)) / 1000;
-
     let surfaceM2 = ml * 0.33;
     let prixProd = surfaceM2 * mat * imp * 115;
     let fraisSortes = (sortes - 1) * 35; 
-
     let coeff = 1.0;
     if (q >= 100000) coeff = 0.50;
     else if (q >= 50000) coeff = 0.65;
     else if (q >= 10000) coeff = 0.80;
-
     let total = (prixProd * coeff) + 120 + fraisSortes;
     if (total < 150) total = 150;
     let pam = (total / q) * 1000;
-    
     return { total, pam, posesLaize, ml };
 }
 
@@ -210,7 +203,6 @@ function calculer() {
     let sortes = parseInt(document.getElementById("sortes").value);
     let mat = parseFloat(document.getElementById("matiere").value);
     let imp = parseFloat(document.getElementById("impression").value);
-
     let body = document.getElementById("paliersBody");
     let stats = document.getElementById("stats");
 
@@ -218,14 +210,12 @@ function calculer() {
         let diffs = [-500, 0, 500, 1000, 2000, 5000, 10000];
         let htmlPaliers = "";
         let mainRes = null;
-
         diffs.forEach(diff => {
             let qVariant = qBase + diff;
             if (qVariant > 0) {
                 let res = moteurCalcul(l, h, qVariant, mat, imp, sortes);
                 if (diff === 0) mainRes = res;
                 let highlightClass = (diff === 0) ? 'row-highlight' : '';
-
                 htmlPaliers += `<tr class="${highlightClass}">
                     <td style="font-weight:bold;">${qVariant}</td>
                     <td style="color:var(--grass-green); font-weight:bold;">${res.total.toFixed(2)} CHF</td>
@@ -233,13 +223,9 @@ function calculer() {
                 </tr>`;
             }
         });
-
         body.innerHTML = htmlPaliers;
-        
         if (mainRes) {
-            stats.innerHTML = 
-                "Poses de front : <span class='highlight'>" + mainRes.posesLaize + "</span> | " +
-                "Métrage (Réf.) : <span class='highlight'>" + mainRes.ml.toFixed(2) + " m</span>";
+            stats.innerHTML = `Poses : <span class='highlight'>${mainRes.posesLaize}</span> | Métrage : <span class='highlight'>${mainRes.ml.toFixed(2)} m</span>`;
         }
     } else {
         body.innerHTML = "";
