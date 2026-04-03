@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculateur HP Indigo 6800</title>
+    <style>
+        :root { --primary: #00ff88; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: var(--primary); text-align: center; margin-top: 0; font-size: 1.4em; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.85em; color: #888; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #2a2a2a; color: white; font-size: 16px; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); outline: none; }
+        .results { background: #252525; padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 4px solid var(--primary); }
+        .res-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .res-label { font-size: 0.9em; color: #aaa; }
+        .res-value { font-size: 1.3em; font-weight: bold; color: var(--primary); }
+        .info-bande { font-size: 0.75em; color: #666; text-align: center; margin-top: 15px; font-style: italic; border-top: 1px solid #333; padding-top: 10px; }
+        .highlight { color: #fff; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>Indigo 6800 - Laize 330</h2>
+    
+    <div class="input-group">
+        <label>Largeur Étiquette (mm)</label>
+        <input type="number" id="largeur" value="50" oninput="calculer()">
+    </div>
+
+    <div class="input-group">
+        <label>Hauteur Étiquette (mm)</label>
+        <input type="number" id="hauteur" value="50" oninput="calculer()">
+    </div>
+
+    <div class="input-group">
+        <label>Quantité totale</label>
+        <input type="number" id="quantite" value="1000" oninput="calculer()">
+    </div>
+
+    <div class="input-group">
+        <label>Matière</label>
+        <select id="matiere" onchange="calculer()">
+            <option value="0.45">Papier blanc standard</option>
+            <option value="0.90">Papier Premium / Vin</option>
+            <option value="0.75">Polypropylène (PP)</option>
+            <option value="1.20">Matière Spéciale / Argent</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>Type d'impression</label>
+        <select id="impression" onchange="calculer()">
+            <option value="1">CMJN Uniquement</option>
+            <option value="1.35">CMJN + Blanc Couvrant</option>
+            <option value="1.15">Noir uniquement</option>
+        </select>
+    </div>
+
+    <div class="results">
+        <div class="res-row">
+            <span class="res-label">Prix Total HT</span>
+            <span class="res-value" id="total">-- CHF</span>
+        </div>
+        <div class="res-row" style="border-top: 1px dashed #444; pt: 10px; margin-top: 10px;">
+            <span class="res-label">Prix au mille (PAM)</span>
+            <span class="res-value" id="pam" style="color: #00d4ff;">-- CHF</span>
+        </div>
+    </div>
+
+    <div class="info-bande" id="details">
+        Optimisation : -- poses de front
+    </div>
+</div>
+
+<script>
+function calculer() {
+    const LAIZE_UTILE = 315; // Sécurité sur 330mm
+    const ESPACE = 3; // Échenillage entre étiquettes
+    
+    let l = parseFloat(document.getElementById("largeur").value) || 0;
+    let h = parseFloat(document.getElementById("hauteur").value) || 0;
+    let q = parseFloat(document.getElementById("quantite").value) || 0;
+    let mat = parseFloat(document.getElementById("matiere").value);
+    let imp = parseFloat(document.getElementById("impression").value);
+
+    if (l > 0 && h > 0 && q > 0) {
+        // Calcul du nombre de poses de front
+        let posesFront = Math.floor(LAIZE_UTILE / (l + ESPACE));
+        if (posesFront < 1) posesFront = 1;
+
+        // Calcul linéaire
+        let nombreDePas = q / posesFront;
+        let metresLineaires = (nombreDePas * (h + ESPACE)) / 1000;
+        let surfaceM2 = metresLineaires * 0.33;
+
+        // Calcul du prix
+        let prixBase = surfaceM2 * mat * imp;
+        
+        // Dégressivité
+        let coeff = 1.0;
+        if (q >= 100000) coeff = 0.55;
+        else if (q >= 50000) coeff = 0.65;
+        else if (q >= 10000) coeff = 0.80;
+
+        let fraisFixes = 100;
+        let total = (prixBase * coeff) + fraisFixes;
+        
+        // Minimum commande
+        if (total < 150) total = 150;
+
+        let pam = (total / q) * 1000;
+
+        // Affichage
+        document.getElementById("total").innerText = total.toFixed(2) + " CHF";
+        document.getElementById("pam").innerText = pam.toFixed(2) + " CHF";
+        document.getElementById("details").innerHTML = 
+            "Optimisation : <span class='highlight'>" + posesFront + "</span> poses de front<br>" +
+            "Métrage estimé : <span class='highlight'>" + metresLineaires.toFixed(1) + "</span> ml";
+    }
+}
+calculer();
+</script>
+</body>
+</html>
