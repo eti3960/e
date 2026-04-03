@@ -7,31 +7,34 @@
     <style>
         :root { 
             --grass-green: #3CB371; 
-            --mid-gray: rgba(0, 0, 0, 0.8); /* Fond noir 80% */
+            --bg-page: rgba(0, 0, 0, 0.8);    /* Noir 80% pour l'arrière-plan */
+            --bg-calc: rgba(0, 0, 0, 0.4);    /* Noir 40% pour le boîtier */
             --blue: #00BFFF; 
             --highlight-green: rgba(60, 179, 113, 0.2); 
         }
 
         body { 
             font-family: 'Fact Expanded', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            background-color: #ffffff; 
-            display: flex; justify-content: center; padding: 5px; color: #333333; margin: 0;
+            background-color: var(--bg-page); 
+            display: flex; justify-content: center; padding: 5px; color: white; margin: 0;
+            min-height: 100vh;
         }
 
         #calc { 
-            background-color: var(--mid-gray); 
-            padding: 10px 25px 50px 25px; /* Réduction padding haut */
+            background-color: var(--bg-calc); 
+            padding: 10px 25px 50px 25px; 
             border-radius: 12px; 
             width: 100%; max-width: 480px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             color: white; 
             position: relative;
-            margin-top: 5px; /* Remonte le bloc */
+            margin-top: 5px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         h1.logo { 
             text-align: center; 
-            margin: 5px 0 10px 0; /* Réduction marge titre de 75% */
+            margin: 5px 0 10px 0; 
             color: var(--grass-green); font-weight: 900; 
             font-size: 4em; line-height: 1;
         }
@@ -73,12 +76,12 @@
         
         .row-highlight { background-color: var(--highlight-green) !important; }
 
-        .info { font-size: 0.85em; color: #e0e0e0; border-top: 1px solid #666; padding-top: 10px; margin-top: 15px; line-height: 1.6; }
+        .info { font-size: 0.85em; color: #d0d0d0; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px; margin-top: 15px; line-height: 1.6; }
         .highlight { color: #ffffff; font-weight: bold; }
 
         .signature {
             position: absolute; bottom: 15px; right: 20px;
-            font-size: 0.7em; color: #d0d0d0; font-weight: bold;
+            font-size: 0.7em; color: #888; font-weight: bold;
         }
     </style>
 </head>
@@ -107,7 +110,7 @@
         <option value="0.50">Sans impression (neutre)</option>
     </select>
 
-    <label>Type de Papier (Laize 330)</label>
+    <label>Type de Papier (330)</label>
     <select id="matiere" onchange="calculer()">
         <option value="0.40">Papier couché</option>
         <option value="0.45">Papier non couché</option>
@@ -123,8 +126,8 @@
         <option value="0">Dorure (160 Fr.)</option>
         <option value="0">Dorure galbée (350.-)</option>
         <option value="0">Flexo sélectif (60.-)</option>
-        <option value="0">Gaufrage (+350.-)</option>
-        <option value="0">Foulage</option>
+        <option value="0">Gaufrage (350.-)</option>
+        <option value="0">Foulage (160.-)</option>
     </select>
 
     <div class="row-inputs">
