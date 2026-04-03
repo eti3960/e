@@ -42,7 +42,7 @@
         .row-inputs {
             display: flex;
             align-items: flex-end;
-            gap: 10px;
+            gap: 10px; /* Espacement identique pour toutes les lignes */
             margin-bottom: 5px;
         }
         .input-group { flex: 1; }
@@ -51,6 +51,8 @@
             font-weight: bold;
             color: #f0f0f0;
         }
+        /* Separateur invisible pour la ligne du bas afin de garder le même alignement */
+        .hidden-sep { visibility: hidden; }
 
         label { display: block; margin: 12px 0 3px; font-size: 0.85em; font-weight: bold; color: #f0f0f0; }
         
@@ -110,7 +112,7 @@
         <option value="0.50">Sans impression (neutre)</option>
     </select>
 
-    <label>Type de Papier (330)</label>
+    <label>Type de papier (330)</label>
     <select id="matiere" onchange="calculer()">
         <option value="0.40">Papier couché</option>
         <option value="0.45">Papier non couché</option>
@@ -120,11 +122,11 @@
         <option value="0.85">PE Transparent</option>
     </select>
 
-    <label>Type d'Ennoblissement</label>
+    <label>Type d'ennoblissement</label>
     <select id="ennoblissement" onchange="calculer()">
         <option value="0">Aucun</option>
         <option value="0">Flexo sélectif (60.-)</option>
-        <option value="0">Dorure (160 Fr.)</option>
+        <option value="0">Dorure (160.-)</option>
         <option value="0">Foulage (160.-)</option>
         <option value="0">Dorure galbée (350.-)</option>
         <option value="0">Gaufrage (350.-)</option>
@@ -136,6 +138,7 @@
             <select id="sortes" onchange="calculer()">
                 </select>
         </div>
+        <div class="separator hidden-sep">x</div>
         <div class="input-group">
             <label>Quantité</label>
             <input type="number" id="quantite" placeholder="0" oninput="calculer()">
