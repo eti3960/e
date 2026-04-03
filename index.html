@@ -51,7 +51,16 @@
             font-size: 0.9em; background: #ffffff; border-radius: 8px; 
             overflow: hidden; color: #333333; 
         }
-        .paliers-table th { background: #f0f0f0; color: var(--blue); padding: 12px; text-align: left; border-bottom: 2px solid #ddd; }
+        
+        /* Titres de colonnes en NOIR */
+        .paliers-table th { 
+            background: #f0f0f0; 
+            color: #000000; 
+            padding: 12px; 
+            text-align: left; 
+            border-bottom: 2px solid #ddd; 
+        }
+        
         .paliers-table td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
         
         .row-highlight { 
@@ -103,9 +112,9 @@
     <label>Type d'Ennoblissement</label>
     <select id="ennoblissement" onchange="calculer()">
         <option value="0">Aucun</option>
-        <option value="160">Dorure (160 Fr.)</option>
-        <option value="350">Dorure galbée (350.-)</option>
-        <option value="60">Flexo sélectif (60.-)</option>
+        <option value="0">Dorure (160 Fr.)</option>
+        <option value="0">Dorure galbée (350.-)</option>
+        <option value="0">Flexo sélectif (60.-)</option>
     </select>
 
     <label>Nombre de sortes (versions)</label>
@@ -144,7 +153,7 @@ const d = new Date();
 const dateStr = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth()+1).toString().padStart(2, '0') + '.' + d.getFullYear();
 document.getElementById('dateSignature').innerHTML = "DA / " + dateStr;
 
-function moteurCalcul(l, h, q, mat, imp, sortes, ennobValue) {
+function moteurCalcul(l, h, q, mat, imp, sortes) {
     const LAIZE = 330;
     const GAP = 4;
     const MARGE_HP = 10;
@@ -159,15 +168,14 @@ function moteurCalcul(l, h, q, mat, imp, sortes, ennobValue) {
     let prixProd = surfaceM2 * mat * imp * 115;
 
     let fraisSortes = (sortes - 1) * 35; 
-    let fraisEnnob = parseFloat(ennobValue);
-    let extraMatiereEnnob = fraisEnnob > 0 ? ml * 0.45 : 0;
 
     let coeff = 1.0;
     if (q >= 100000) coeff = 0.50;
     else if (q >= 50000) coeff = 0.65;
     else if (q >= 10000) coeff = 0.80;
 
-    let total = (prixProd * coeff) + 120 + fraisSortes + fraisEnnob + extraMatiereEnnob;
+    // Calcul sans ajout des frais d'ennoblissement (valeurs à 0)
+    let total = (prixProd * coeff) + 120 + fraisSortes;
     if (total < 150) total = 150;
     let pam = (total / q) * 1000;
     
@@ -181,7 +189,6 @@ function calculer() {
     let sortes = parseInt(document.getElementById("sortes").value);
     let mat = parseFloat(document.getElementById("matiere").value);
     let imp = parseFloat(document.getElementById("impression").value);
-    let ennob = document.getElementById("ennoblissement").value;
 
     if (l > 0 && h > 0 && qBase > 0) {
         let diffs = [-500, 0, 500, 1000, 2000, 5000, 10000];
@@ -191,7 +198,7 @@ function calculer() {
         diffs.forEach(diff => {
             let qVariant = qBase + diff;
             if (qVariant > 0) {
-                let res = moteurCalcul(l, h, qVariant, mat, imp, sortes, ennob);
+                let res = moteurCalcul(l, h, qVariant, mat, imp, sortes);
                 if (diff === 0) mainRes = res;
                 let highlightClass = (diff === 0) ? 'row-highlight' : '';
 
