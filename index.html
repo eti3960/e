@@ -9,7 +9,7 @@
             --grass-green: #3CB371; 
             --mid-gray: #808080; 
             --blue: #00BFFF; 
-            --highlight-green: rgba(60, 179, 113, 0.2); /* Vert herbe 20% */
+            --highlight-green: rgba(60, 179, 113, 0.2); 
         }
 
         body { 
@@ -54,7 +54,6 @@
         .paliers-table th { background: #f0f0f0; color: var(--blue); padding: 12px; text-align: left; border-bottom: 2px solid #ddd; }
         .paliers-table td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
         
-        /* Style pour la ligne sélectionnée (Quantité de référence) */
         .row-highlight { 
             background-color: var(--highlight-green) !important; 
         }
@@ -85,10 +84,10 @@
 
     <label>Type d'impression</label>
     <select id="impression" onchange="calculer()">
-        <option value="1.0">Quadri (CMYK)</option>
-        <option value="1.45">Quadri + Blanc couvrant</option>
-        <option value="0.80">Noir seul</option>
-        <option value="0.50">Sans impression (Neutre)</option>
+        <option value="0.80">Noir</option>
+        <option value="1.0">CMYK</option>
+        <option value="1.45">CMYK + blanc couvrant</option>
+        <option value="0.50">Sans impression (neutre)</option>
     </select>
 
     <label>Type de Papier (Laize 330)</label>
@@ -104,9 +103,9 @@
     <label>Type d'Ennoblissement</label>
     <select id="ennoblissement" onchange="calculer()">
         <option value="0">Aucun</option>
-        <option value="160">Dorure à chaud (cliché + matière)</option>
-        <option value="60">Vernis sélectif</option>
-        <option value="350">Dorure Galbée (outil + matière)</option>
+        <option value="160">Dorure (160 Fr.)</option>
+        <option value="350">Dorure galbée (350.-)</option>
+        <option value="60">Flexo sélectif (60.-)</option>
     </select>
 
     <label>Nombre de sortes (versions)</label>
@@ -133,7 +132,6 @@
 </div>
 
 <script>
-// Génération des 30 sortes
 const selSortes = document.getElementById('sortes');
 for (let i = 1; i <= 30; i++) {
     let opt = document.createElement('option');
@@ -142,7 +140,6 @@ for (let i = 1; i <= 30; i++) {
     selSortes.appendChild(opt);
 }
 
-// Date du jour automatique
 const d = new Date();
 const dateStr = d.getDate().toString().padStart(2, '0') + '.' + (d.getMonth()+1).toString().padStart(2, '0') + '.' + d.getFullYear();
 document.getElementById('dateSignature').innerHTML = "DA / " + dateStr;
@@ -187,7 +184,6 @@ function calculer() {
     let ennob = document.getElementById("ennoblissement").value;
 
     if (l > 0 && h > 0 && qBase > 0) {
-        // Liste des écarts demandés
         let diffs = [-500, 0, 500, 1000, 2000, 5000, 10000];
         let htmlPaliers = "";
         let mainRes = null;
@@ -197,8 +193,6 @@ function calculer() {
             if (qVariant > 0) {
                 let res = moteurCalcul(l, h, qVariant, mat, imp, sortes, ennob);
                 if (diff === 0) mainRes = res;
-
-                // Application de la classe de surlignage si c'est la quantité de base (diff === 0)
                 let highlightClass = (diff === 0) ? 'row-highlight' : '';
 
                 htmlPaliers += `<tr class="${highlightClass}">
