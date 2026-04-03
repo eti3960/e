@@ -1,3 +1,8 @@
+Voici la version finalisée avec les derniers ajustements. J'ai ajouté le "x" séparateur entre les champs de dimensions, tout en veillant à ce que les mentions (laize) et (avance) restent bien présentes.
+Modifications apportées :
+ * Séparateur "x" : Placé visuellement entre les deux premiers champs pour une lecture naturelle du format.
+ * Restauration des parenthèses : Les mentions (laize) et (avance) sont de retour dans les labels.
+ * Alignement : Les champs occupent toujours 50% de la largeur pour conserver l'harmonie visuelle.
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -29,12 +34,25 @@
         }
 
         h1.logo { 
-            text-align: center; 
-            margin: 0 0 10px 0; 
-            color: var(--grass-green); 
-            font-weight: 900; 
-            font-size: 4em;
-            line-height: 1;
+            text-align: center; margin: 0 0 10px 0; 
+            color: var(--grass-green); font-weight: 900; 
+            font-size: 4em; line-height: 1;
+        }
+
+        /* Système de grille avec séparateur X */
+        .row-inputs {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        .input-group {
+            flex: 1;
+        }
+        .separator {
+            padding-bottom: 15px;
+            font-weight: bold;
+            color: #f0f0f0;
         }
 
         label { display: block; margin: 12px 0 3px; font-size: 0.85em; font-weight: bold; color: #f0f0f0; }
@@ -53,29 +71,20 @@
         }
         
         .paliers-table th { 
-            background: #f0f0f0; 
-            color: #000000; 
-            padding: 12px; 
-            text-align: left; 
-            border-bottom: 2px solid #ddd; 
+            background: #f0f0f0; color: #000000; 
+            padding: 12px; text-align: left; border-bottom: 2px solid #ddd; 
         }
         
         .paliers-table td { padding: 12px; border-bottom: 1px solid #e0e0e0; }
         
-        .row-highlight { 
-            background-color: var(--highlight-green) !important; 
-        }
+        .row-highlight { background-color: var(--highlight-green) !important; }
 
         .info { font-size: 0.85em; color: #e0e0e0; border-top: 1px solid #999; padding-top: 10px; margin-top: 15px; line-height: 1.6; }
         .highlight { color: #ffffff; font-weight: bold; }
 
         .signature {
-            position: absolute;
-            bottom: 15px;
-            right: 20px;
-            font-size: 0.7em;
-            color: #d0d0d0;
-            font-weight: bold;
+            position: absolute; bottom: 15px; right: 20px;
+            font-size: 0.7em; color: #d0d0d0; font-weight: bold;
         }
     </style>
 </head>
@@ -84,11 +93,17 @@
 <div id="calc">
     <h1 class="logo">e</h1>
 
-    <label>Largeur Étiquette mm (laize)</label>
-    <input type="number" id="largeur" placeholder="0" oninput="calculer()">
-
-    <label>Hauteur Étiquette mm (avance)</label>
-    <input type="number" id="hauteur" placeholder="0" oninput="calculer()">
+    <div class="row-inputs">
+        <div class="input-group">
+            <label>Largeur mm (laize)</label>
+            <input type="number" id="largeur" placeholder="0" oninput="calculer()">
+        </div>
+        <div class="separator">x</div>
+        <div class="input-group">
+            <label>Hauteur mm (avance)</label>
+            <input type="number" id="hauteur" placeholder="0" oninput="calculer()">
+        </div>
+    </div>
 
     <label>Type d'impression</label>
     <select id="impression" onchange="calculer()">
@@ -118,12 +133,17 @@
         <option value="0">Foulage</option>
     </select>
 
-    <label>Nombre de sortes (versions)</label>
-    <select id="sortes" onchange="calculer()">
-        </select>
-
-    <label>Quantité demandée</label>
-    <input type="number" id="quantite" placeholder="0" oninput="calculer()">
+    <div class="row-inputs">
+        <div class="input-group">
+            <label>Nb de sortes</label>
+            <select id="sortes" onchange="calculer()">
+                </select>
+        </div>
+        <div class="input-group">
+            <label>Quantité</label>
+            <input type="number" id="quantite" placeholder="0" oninput="calculer()">
+        </div>
+    </div>
 
     <table class="paliers-table">
         <thead>
@@ -138,16 +158,15 @@
 
     <div class="info" id="stats">Saisissez les données...</div>
 
-    <div class="signature" id="dateSignature">DA / --.04.2024</div>
+    <div class="signature" id="dateSignature">DA / --</div>
 </div>
 
 <script>
-// Réinitialisation des champs au rafraîchissement de la page
 window.onload = function() {
     document.getElementById("largeur").value = "";
     document.getElementById("hauteur").value = "";
     document.getElementById("quantite").value = "";
-    calculer(); // Met à jour l'affichage vide
+    calculer();
 };
 
 const selSortes = document.getElementById('sortes');
@@ -175,7 +194,6 @@ function moteurCalcul(l, h, q, mat, imp, sortes) {
 
     let surfaceM2 = ml * 0.33;
     let prixProd = surfaceM2 * mat * imp * 115;
-
     let fraisSortes = (sortes - 1) * 35; 
 
     let coeff = 1.0;
@@ -236,3 +254,4 @@ function calculer() {
 </script>
 </body>
 </html>
+
