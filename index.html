@@ -7,8 +7,8 @@
     <style>
         :root { 
             --grass-green: #3CB371; 
-            --bg-page: rgba(0, 0, 0, 0.8);    /* Noir 40% pour l'arrière-plan */
-            --bg-calc: rgba(0, 0, 0, 0.4);    /* Noir 80% pour le boîtier */
+            --bg-page: rgba(0, 0, 0, 0.8);    
+            --bg-calc: rgba(0, 0, 0, 0.4);    
             --blue: #00BFFF; 
             --highlight-green: rgba(60, 179, 113, 0.2); 
         }
@@ -22,14 +22,14 @@
 
         #calc { 
             background-color: var(--bg-calc); 
-            padding: 10px 25px 50px 25px; 
+            padding: 5px 25px 50px 25px; 
             border-radius: 12px; 
             width: 100%; max-width: 480px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             color: white; 
             position: relative;
             margin-top: 5px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         h1.logo { 
@@ -123,11 +123,11 @@
     <label>Type d'Ennoblissement</label>
     <select id="ennoblissement" onchange="calculer()">
         <option value="0">Aucun</option>
-        <option value="0">Dorure (160 Fr.)</option>
-        <option value="0">Dorure galbée (350.-)</option>
         <option value="0">Flexo sélectif (60.-)</option>
-        <option value="0">Gaufrage (350.-)</option>
+        <option value="0">Dorure (160 Fr.)</option>
         <option value="0">Foulage (160.-)</option>
+        <option value="0">Dorure galbée (350.-)</option>
+        <option value="0">Gaufrage (350.-)</option>
     </select>
 
     <div class="row-inputs">
