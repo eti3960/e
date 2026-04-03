@@ -5,35 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HP</title>
     <style>
-        :root { --accent: #00ff88; --text: #ffffff; --blue: #00d4ff; }
+        :root { 
+            --grass-green: #3CB371; 
+            --mid-gray: #808080; 
+            --blue: #00BFFF; 
+        }
         body { 
-            font-family: sans-serif; 
-            background-color: #808080; /* Gris 50% */
-            display: flex; justify-content: center; padding: 20px; color: var(--text);
+            font-family: 'Helvetica', 'Arial', sans-serif; 
+            background-color: #ffffff; 
+            display: flex; justify-content: center; padding: 20px; color: #333333; margin: 0;
         }
         #calc { 
-            background: #333; padding: 25px; border-radius: 15px; 
-            width: 100%; max-width: 480px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background-color: var(--mid-gray); 
+            padding: 25px; border-radius: 12px; 
+            width: 100%; max-width: 480px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white; 
         }
-        h2 { text-align: center; margin-top: 0; color: var(--accent); text-transform: uppercase; }
-        label { display: block; margin: 12px 0 5px; font-size: 0.85em; font-weight: bold; color: #bbb; }
+        h2 { text-align: center; margin-top: 0; color: white; text-transform: uppercase; letter-spacing: 2px;}
+        label { display: block; margin: 12px 0 3px; font-size: 0.85em; font-weight: bold; color: #f0f0f0; }
         input, select { 
-            width: 100%; padding: 12px; border-radius: 8px; border: none; 
-            background: #444; color: white; font-size: 16px; box-sizing: border-box; 
-            margin-bottom: 5px;
+            width: 100%; padding: 10px; border-radius: 6px; border: none; 
+            background: #ffffff; color: #333333; font-size: 16px; box-sizing: border-box; 
+            margin-bottom: 5px; font-family: 'Helvetica', sans-serif;
         }
         .res-box { 
-            background: #222; padding: 15px; border-radius: 10px; 
-            margin-top: 20px; border-left: 5px solid var(--accent); 
+            background: #ffffff; padding: 15px; border-radius: 8px; 
+            margin-top: 20px; border-left: 5px solid var(--grass-green); 
+            color: #333333;
         }
         .res-row { display: flex; justify-content: space-between; margin-bottom: 8px; align-items: center; }
-        .val { font-weight: bold; color: var(--accent); font-size: 1.2em; }
-        
-        .paliers-table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.85em; background: #2a2a2a; border-radius: 8px; overflow: hidden; }
-        .paliers-table th { background: #444; color: var(--blue); padding: 10px; text-align: left; }
-        .paliers-table td { padding: 10px; border-bottom: 1px solid #333; }
-        .info { font-size: 0.85em; color: #bbb; border-top: 1px solid #444; padding-top: 10px; margin-top: 15px; line-height: 1.6; }
-        .highlight { color: #fff; font-weight: bold; }
+        .val { font-weight: bold; color: var(--grass-green); font-size: 1.25em; }
+        .paliers-table { width: 100%; margin-top: 20px; border-collapse: collapse; font-size: 0.85em; background: #ffffff; border-radius: 8px; overflow: hidden; color: #333333; }
+        .paliers-table th { background: #f0f0f0; color: var(--blue); padding: 10px; text-align: left; }
+        .paliers-table td { padding: 10px; border-bottom: 1px solid #e0e0e0; }
+        .info { font-size: 0.85em; color: #e0e0e0; border-top: 1px solid #999; padding-top: 10px; margin-top: 15px; line-height: 1.6; }
+        .highlight { color: #ffffff; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -57,24 +64,27 @@
 
     <label>Type de Papier (Laize 330)</label>
     <select id="matiere" onchange="calculer()">
-        <option value="0.45">Papier blanc</option>
-        <option value="0.65">Papier structuré</option>
-        <option value="0.90">Papier premium vin</option>
-        <option value="0.75">Polypropylène blanc</option>
+        <option value="0.40">Papier couché</option>
+        <option value="0.45">Papier non couché</option>
+        <option value="1.10">Papier Or / Argent</option>
+        <option value="0.70">PP Transparent</option>
+        <option value="0.65">PP Blanc</option>
+        <option value="0.85">PE Transparent</option>
     </select>
 
-    <label>Type d'Ennoblissement (Indicatif)</label>
-    <select id="ennoblissement">
+    <label>Type d'Ennoblissement</label>
+    <select id="ennoblissement" onchange="calculer()">
         <option value="0">Aucun</option>
-        <option value="160">Dorure à chaud (160 CHF)</option>
-        <option value="60">Vernis sélectif (60 CHF)</option>
-        <option value="350">Galbe (350 CHF)</option>
+        <option value="160">Dorure à chaud (+160 CHF cliché + matière)</option>
+        <option value="60">Vernis sélectif (+60 CHF)</option>
+        <option value="350">Dorure Galbée (+350 CHF outil + matière)</option>
     </select>
 
     <label>Nombre de sortes (versions)</label>
-    <input type="number" id="sortes" value="1" min="1" oninput="calculer()">
+    <select id="sortes" onchange="calculer()">
+        </select>
 
-    <label>Quantité totale (toutes sortes confondues)</label>
+    <label>Quantité totale</label>
     <input type="number" id="quantite" value="1000" oninput="calculer()">
 
     <div class="res-box">
@@ -88,46 +98,62 @@
         </div>
     </div>
 
-    <table class="paliers-table" id="tablePaliers">
+    <table class="paliers-table">
         <thead>
-            <tr>
-                <th>Qté</th>
-                <th>Total HT</th>
-                <th>PAM</th>
-            </tr>
+            <tr><th>Qté</th><th>Total HT</th><th>PAM</th></tr>
         </thead>
         <tbody id="paliersBody"></tbody>
     </table>
 
-    <div class="info" id="stats">Saisissez les dimensions...</div>
+    <div class="info" id="stats">Saisissez les données...</div>
 </div>
 
 <script>
-function moteurCalcul(l, h, q, mat, imp, sortes) {
-    const LAIZE_MAX = 330;
-    const MARGE_TECH = 10; 
-    const GAP = 4;
+// Remplissage du menu Sortes (1 à 30)
+const selectSortes = document.getElementById('sortes');
+for (let i = 1; i <= 30; i++) {
+    let opt = document.createElement('option');
+    opt.value = i;
+    opt.innerHTML = i;
+    selectSortes.appendChild(opt);
+}
 
-    let posesLaize = Math.floor((LAIZE_MAX - MARGE_TECH) / (l + GAP));
+function moteurCalcul(l, h, q, mat, imp, sortes, ennobValue) {
+    const LAIZE = 330;
+    const GAP = 4;
+    const MARGE_HP = 10;
+
+    // 1. Poses
+    let posesLaize = Math.floor((LAIZE - MARGE_HP) / (l + GAP));
     if (posesLaize < 1) posesLaize = 1;
 
+    // 2. Métrage
     let nbRangs = Math.ceil(q / posesLaize);
     let ml = (nbRangs * (h + GAP)) / 1000;
 
+    // 3. Calcul Prix Production
     let surfaceM2 = ml * 0.33;
-    let prixBase = surfaceM2 * mat * imp * 110;
+    let prixProd = surfaceM2 * mat * imp * 115;
 
+    // 4. Impact des sortes (Frais fixes + calages supplémentaires)
+    let fraisSortes = (sortes - 1) * 35; 
+
+    // 5. Impact Ennoblissement (Frais fixes + coût matière au ml)
+    let fraisEnnob = parseFloat(ennobValue);
+    let extraMatiereEnnob = 0;
+    if (fraisEnnob > 0) {
+        extraMatiereEnnob = ml * 0.45; // Consommation film/vernis au mètre
+    }
+
+    // Dégressivité
     let coeff = 1.0;
     if (q >= 100000) coeff = 0.50;
     else if (q >= 50000) coeff = 0.65;
     else if (q >= 10000) coeff = 0.80;
 
-    // Frais fixes augmentés par le nombre de sortes (calage par version)
-    let fraisFixes = 120 + (sortes - 1) * 25; 
+    let total = (prixProd * coeff) + 120 + fraisSortes + fraisEnnob + extraMatiereEnnob;
     
-    let total = (prixBase * coeff) + fraisFixes;
     if (total < 150) total = 150;
-    
     let pam = (total / q) * 1000;
     
     return { total, pam, posesLaize, ml };
@@ -137,12 +163,14 @@ function calculer() {
     let l = parseFloat(document.getElementById("largeur").value) || 0;
     let h = parseFloat(document.getElementById("hauteur").value) || 0;
     let qBase = parseFloat(document.getElementById("quantite").value) || 0;
-    let sortes = parseInt(document.getElementById("sortes").value) || 1;
+    let sortes = parseInt(document.getElementById("sortes").value);
     let mat = parseFloat(document.getElementById("matiere").value);
     let imp = parseFloat(document.getElementById("impression").value);
+    let ennob = document.getElementById("ennoblissement").value;
 
     if (l > 0 && h > 0 && qBase > 0) {
-        let resMain = moteurCalcul(l, h, qBase, mat, imp, sortes);
+        let resMain = moteurCalcul(l, h, qBase, mat, imp, sortes, ennob);
+        
         document.getElementById("total").innerText = resMain.total.toFixed(2) + " CHF";
         document.getElementById("pam").innerText = resMain.pam.toFixed(2) + " CHF";
         document.getElementById("stats").innerHTML = 
@@ -154,8 +182,8 @@ function calculer() {
         paliers.forEach(diff => {
             let qPalier = qBase + diff;
             if (qPalier > 0) {
-                let resP = moteurCalcul(l, h, qPalier, mat, imp, sortes);
-                htmlPaliers += `<tr><td>${qPalier}</td><td style="color:#00ff88">${resP.total.toFixed(2)}</td><td style="color:#00d4ff">${resP.pam.toFixed(2)}</td></tr>`;
+                let resP = moteurCalcul(l, h, qPalier, mat, imp, sortes, ennob);
+                htmlPaliers += `<tr><td>${qPalier}</td><td style="color:var(--grass-green); font-weight:bold;">${resP.total.toFixed(2)}</td><td style="color:var(--blue);">${resP.pam.toFixed(2)}</td></tr>`;
             }
         });
         document.getElementById("paliersBody").innerHTML = htmlPaliers;
