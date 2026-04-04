@@ -7,8 +7,9 @@
     <style>
         :root { 
             --grass-green: #3CB371; 
-            --bg-page: rgba(0, 0, 0, 0.8);    
-            /* FRAME : PASSAGE A 10% */
+            /* ARRIERE-PLAN PAGE : NOIR 70% */
+            --bg-page: rgba(0, 0, 0, 0.7);    
+            /* FRAME CALCULATEUR : 10% (plus clair que le fond) */
             --bg-calc: rgba(255, 255, 255, 0.1);    
             --blue: #00BFFF; 
             --highlight-green: rgba(60, 179, 113, 0.2); 
@@ -24,22 +25,19 @@
 
         #calc { 
             background-color: var(--bg-calc); 
-            /* Réduction de la marge interne haute (padding) */
             padding: 2px 25px 40px 25px; 
             border-radius: 12px; 
             width: 100%; max-width: 480px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             color: white; 
             position: relative;
-            /* Réduction de la marge externe haute de moitié */
             margin-top: 5px; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px);
         }
 
         h1.logo { 
             text-align: center; 
-            /* Réduction de l'espace au-dessus du logo */
             margin: 2px 0 10px 0; 
             color: var(--grass-green); font-weight: 900; 
             font-size: 4em; line-height: 1;
