@@ -41,7 +41,7 @@
             font-size: 4em; line-height: 1;
         }
 
-        /* Structure commune pour les lignes d'inputs */
+        /* Conteneur de ligne flexible */
         .row-inputs {
             display: flex;
             align-items: flex-end;
@@ -49,20 +49,21 @@
             margin-bottom: 5px;
         }
 
-        /* Ligne Format (2 cols + sep) */
-        .row-format .input-group { flex: 1; }
+        /* Séparateurs (visibles ou invisibles pour l'alignement) */
         .separator {
             padding-bottom: 15px;
             font-weight: bold;
             color: #f0f0f0;
+            width: 12px; /* Largeur fixe pour garantir la symétrie */
+            text-align: center;
         }
+        .hidden-sep { visibility: hidden; }
 
-        /* Ligne Triplet (25% - 50% - 25%) */
-        .col-sortes { flex: 1; } /* 25% */
-        .col-qte { flex: 2; }    /* 50% */
-        .col-marge { flex: 1; }  /* 25% */
+        /* Proportion des colonnes */
+        .col-25 { flex: 0.5; } /* Nb sortes et Marge */
+        .col-50 { flex: 1; }   /* Quantité, Largeur, Hauteur */
 
-        label { display: block; margin: 12px 0 3px; font-size: 0.85em; font-weight: bold; color: #f0f0f0; }
+        label { display: block; margin: 12px 0 3px; font-size: 0.85em; font-weight: bold; color: #f0f0f0; white-space: nowrap; }
         label i { font-style: italic; }
         
         input, select { 
@@ -101,13 +102,13 @@
 <div id="calc">
     <h1 class="logo">e</h1>
 
-    <div class="row-inputs row-format">
-        <div class="input-group">
+    <div class="row-inputs">
+        <div class="col-50">
             <label>Largeur mm (L)</label>
             <input type="number" id="largeur" placeholder="0" oninput="calculer()">
         </div>
         <div class="separator">x</div>
-        <div class="input-group">
+        <div class="col-50">
             <label>Hauteur mm (A)</label>
             <input type="number" id="hauteur" placeholder="0" oninput="calculer()">
         </div>
@@ -142,16 +143,18 @@
     </select>
 
     <div class="row-inputs">
-        <div class="input-group col-sortes">
+        <div class="col-25">
             <label>Nb sortes</label>
             <select id="sortes" onchange="calculer()">
                 </select>
         </div>
-        <div class="input-group col-qte">
-            <label>Quantité demandée</label>
+        <div class="separator hidden-sep">x</div>
+        <div class="col-50">
+            <label>Quantité</label>
             <input type="number" id="quantite" placeholder="0" oninput="calculer()">
         </div>
-        <div class="input-group col-marge">
+        <div class="separator hidden-sep">x</div>
+        <div class="col-25">
             <label><i>m</i> %</label>
             <select id="marge" onchange="calculer()">
                 <option value="0" selected>0</option>
@@ -236,7 +239,6 @@ function calculer() {
     let stats = document.getElementById("stats");
 
     if (l > 0 && h > 0 && qBase > 0) {
-        // Liste des écarts demandés (Suppression du -500)
         let diffs = [0, 500, 1000, 2000, 5000, 10000];
         let htmlPaliers = "";
         let mainRes = null;
